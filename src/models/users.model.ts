@@ -21,6 +21,7 @@ export default function (app: Application) {
   }, {
     hooks: {
       beforeCount(options: any) {
+        // eslint-disable-next-line no-param-reassign
         options.raw = true;
       },
     },

@@ -14,6 +14,7 @@ export default function (app: Application) {
 
   app.set('sequelizeClient', sequelize);
 
+  // eslint-disable-next-line no-param-reassign
   app.setup = function (...args) {
     const result = oldSetup.apply(this, args);
 
