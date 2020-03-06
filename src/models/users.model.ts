@@ -1,7 +1,6 @@
-// See http://docs.sequelizejs.com/en/latest/docs/models-definition/
-// for more of what you can do here.
 import { Sequelize, DataTypes } from 'sequelize';
 import { Application } from '../declarations';
+
 
 export default function (app: Application) {
   const sequelizeClient: Sequelize = app.get('sequelizeClient');
@@ -16,7 +15,10 @@ export default function (app: Application) {
       type: DataTypes.STRING,
       allowNull: false,
     },
-
+    userRole: {
+      type: DataTypes.ENUM('author', 'subscriber', 'follower'),
+      defaultValue: 'follower',
+    },
 
   }, {
     hooks: {
