@@ -29,7 +29,8 @@
     "start": "npm run compile && node lib/",
     "lint": "eslint --quiet --fix --ext .js,.ts,.d.ts src",
     "jest": "jest  --forceExit",
-    "compile": "shx rm -rf lib/ && tsc"
+    "compile": "shx rm -rf lib/ && tsc",
+    "db-migrate": "npm run compile && sequelize db:migrate"
   },
   "standard": {
     "env": [
@@ -53,6 +54,7 @@
     "helmet": "^3.21.3",
     "pg": "^7.18.2",
     "sequelize": "^5.21.5",
+    "sequelize-cli": "^5.5.1",
     "serve-favicon": "^2.5.0",
     "winston": "^3.2.1"
   },
