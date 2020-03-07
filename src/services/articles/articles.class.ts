@@ -4,10 +4,12 @@ import { Application } from '../../declarations';
 
 
 interface Data {
+  id: Id;
   title: string;
   categories: string[];
   isPrivate: boolean;
   content: string;
+  authorId: Id;
   createdAt: Date;
   updatedAt: Date;
 }

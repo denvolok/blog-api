@@ -52,6 +52,7 @@
     "cors": "^2.8.5",
     "feathers-blob": "^2.2.0",
     "feathers-hooks-common": "^5.0.2",
+    "feathers-permissions": "^2.0.1",
     "feathers-sequelize": "^6.1.0",
     "fs-blob-store": "^5.2.1",
     "helmet": "^3.21.3",

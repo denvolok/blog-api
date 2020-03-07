@@ -15,9 +15,9 @@ export default function (app: Application) {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    userRole: {
-      type: DataTypes.ENUM('author', 'subscriber', 'follower'),
-      defaultValue: 'follower',
+    permissions: {
+      type: DataTypes.ARRAY(DataTypes.ENUM('author', 'subscriber', 'follower')),
+      defaultValue: ['follower'],
     },
 
   }, {
@@ -28,12 +28,6 @@ export default function (app: Application) {
       },
     },
   });
-
-  // eslint-disable-next-line no-unused-vars
-  (users as any).associate = function (models: any) {
-    // Define associations here
-    // See http://docs.sequelizejs.com/en/latest/docs/associations/
-  };
 
   return users;
 }

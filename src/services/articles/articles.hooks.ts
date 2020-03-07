@@ -1,5 +1,5 @@
 import { authenticate } from '@feathersjs/authentication';
-import authByUserRole from '../../hooks/auth-by-user-role';
+import checkPermissions from 'feathers-permissions';
 import protectPrivateArticles from '../../hooks/protect-private-articles';
 import exposeUserData from '../../hooks/expose-user-data';
 import populateArticle from '../../hooks/populate-article';
@@ -7,16 +7,18 @@ import updateArticleContentFile from '../../hooks/update-article-content-file';
 
 const { required } = require('feathers-hooks-common');
 
+const authorPermission = checkPermissions({ roles: ['author'] });
+
 
 export default {
   before: {
     all: [],
     find: [],
     get: [],
-    create: [authenticate('jwt'), authByUserRole('author'), required('title'), updateArticleContentFile()],
-    update: [authenticate('jwt'), authByUserRole('author'), required('title'), updateArticleContentFile()],
-    patch: [authenticate('jwt'), authByUserRole('author'), updateArticleContentFile()],
-    remove: [authenticate('jwt'), authByUserRole('author')],
+    create: [authenticate('jwt'), authorPermission, required('title'), updateArticleContentFile()],
+    update: [authenticate('jwt'), authorPermission, required('title'), updateArticleContentFile()],
+    patch: [authenticate('jwt'), authorPermission, updateArticleContentFile()],
+    remove: [authenticate('jwt'), authorPermission],
   },
 
   after: {
