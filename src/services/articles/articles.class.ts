@@ -1,29 +1,46 @@
 import { Service, SequelizeServiceOptions } from 'feathers-sequelize';
-import { Params } from '@feathersjs/feathers';
+import { Id, Params } from '@feathersjs/feathers';
 import { Application } from '../../declarations';
 
 
-interface ArticleData {
+interface Data {
+  title: string;
   categories: string[];
   isPrivate: boolean;
   content: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+declare module '../../declarations' {
+  interface ServiceModels {
+    'articles': Data;
+  }
 }
 
 export class Articles extends Service {
+  app: Application;
+
   constructor(options: Partial<SequelizeServiceOptions>, app: Application) {
     super(options);
+    this.app = app;
   }
 
-  async create(data: ArticleData, params: Params) {
-    const { categories, isPrivate, content } = data;
-    const articleData = {
-      categories,
-      isPrivate,
-      // TODO: write content to a file and provide the file path
-      contentFilePath: 'mock_path',
+  async create(data: Data, params: Params) {
+    const updatedData = {
+      ...data,
       authorId: params.user.id,
     };
 
-    return super.create(articleData, params);
+    return super.create(updatedData, params);
+  }
+
+  async remove(id: Id, params: Params) {
+    const article = await super.remove(id, params);
+
+    await this.app.service('uploads').remove(article.content);
+    article.content = '';
+
+    return article;
   }
 }

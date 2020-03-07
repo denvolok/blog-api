@@ -1,9 +1,14 @@
 import { Sequelize, DataTypes } from 'sequelize';
 import { Application } from '../declarations';
 
+
 export default function (app: Application) {
   const sequelizeClient: Sequelize = app.get('sequelizeClient');
   const articles = sequelizeClient.define('articles', {
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     categories: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: false,
@@ -13,7 +18,7 @@ export default function (app: Application) {
       defaultValue: false,
       comment: 'Private articles are only for subscribers',
     },
-    contentFilePath: {
+    content: {
       type: DataTypes.STRING,
       allowNull: false,
     },
