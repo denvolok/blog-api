@@ -15,7 +15,7 @@ const updateArticleContentFile = (): Hook => async (context: HookContext<Service
 
     // Remove old file if needed
     if (context.method === 'patch' || context.method === 'update') {
-      const oldArticle = await app.service('articles').get(context.id, { skipPopulation: true });
+      const oldArticle = await app.service('articles').get(context.id, { ...context.params, skipPopulation: true });
 
       await app.service('uploads')
         .remove(oldArticle.content)

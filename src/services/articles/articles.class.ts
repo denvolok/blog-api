@@ -9,7 +9,7 @@ interface Data {
   categories: string[];
   isPrivate: boolean;
   content: string;
-  authorId: Id;
+  userId: Id;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -26,15 +26,6 @@ export class Articles extends Service {
   constructor(options: Partial<SequelizeServiceOptions>, app: Application) {
     super(options);
     this.app = app;
-  }
-
-  async create(data: Data, params: Params) {
-    const updatedData = {
-      ...data,
-      authorId: params.user.id,
-    };
-
-    return super.create(updatedData, params);
   }
 
   async remove(id: Id, params: Params) {
