@@ -3,6 +3,8 @@
 
 import { validate } from 'feathers-hooks-common';
 import { protectTimestamps } from './hooks/common';
+import { limitToUserHandler } from './hooks/error-handlers';
+
 
 export default {
   before: {
@@ -26,7 +28,7 @@ export default {
   },
 
   error: {
-    all: [],
+    all: [limitToUserHandler],
     find: [],
     get: [],
     create: [],

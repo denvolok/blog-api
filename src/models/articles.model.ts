@@ -33,7 +33,7 @@ export default function (app: Application) {
 
   (articles as any).associate = function (models: any) {
     this.belongsTo(models.users);
-    this.hasMany(models.comments);
+    this.hasMany(models.comments, { onDelete: 'CASCADE', hooks: true });
   };
 
   return articles;

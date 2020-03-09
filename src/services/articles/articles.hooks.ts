@@ -3,10 +3,9 @@ import protectPrivateArticles from '../../hooks/protect-private-articles';
 import exposeUserData from '../../hooks/expose-user-data';
 import populateArticle from '../../hooks/populate-article';
 import updateArticleContentFile from '../../hooks/update-article-content-file';
-import { authorPermission, setUserId } from '../../hooks/common';
+import { authorPermission, limitToUser, setUserId } from '../../hooks/common';
 
 const { required } = require('feathers-hooks-common');
-
 
 export default {
   before: {
@@ -20,9 +19,9 @@ export default {
       required('title', 'userId'),
       updateArticleContentFile(),
     ],
-    update: [authenticate('jwt'), authorPermission, updateArticleContentFile()],
-    patch: [authenticate('jwt'), authorPermission, updateArticleContentFile()],
-    remove: [authenticate('jwt'), authorPermission],
+    update: [authenticate('jwt'), limitToUser, updateArticleContentFile()],
+    patch: [authenticate('jwt'), limitToUser, updateArticleContentFile()],
+    remove: [authenticate('jwt'), limitToUser],
   },
 
   after: {
