@@ -28,6 +28,19 @@ export class Articles extends Service {
     this.app = app;
   }
 
+  async get(id: Id, params: Params) {
+    const updatedParams = {
+      ...params,
+      sequelize: {
+        ...params.sequelize,
+        raw: false,
+        include: this.app.service('comments').getModel(params),
+      },
+    };
+
+    return super.get(id, updatedParams);
+  }
+
   async remove(id: Id, params: Params) {
     const article = await super.remove(id, params);
 
