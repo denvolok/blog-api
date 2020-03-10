@@ -1,4 +1,9 @@
 {
   "host": "blog-api-app.feathersjs.com",
-  "port": "PORT"
+  "port": "PORT",
+  "authentication": {
+    "jwtOptions": {
+      "expiresIn": "1d"
+    }
+  }
 }
