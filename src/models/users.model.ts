@@ -29,5 +29,9 @@ export default function (app: Application) {
     },
   });
 
+  (users as any).associate = function (models: any) {
+    this.hasMany(models.comments, { onDelete: 'CASCADE', hooks: true });
+  };
+
   return users;
 }
