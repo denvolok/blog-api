@@ -30,19 +30,6 @@ export class Articles extends Service<Data> {
     this.app = app;
   }
 
-  async get(id: Id, params: Params) {
-    const updatedParams = {
-      ...params,
-      sequelize: {
-        ...params.sequelize,
-        raw: false,
-        include: this.app.service('comments').getModel(params),
-      },
-    };
-
-    return super.get(id, updatedParams);
-  }
-
   async find(params: Params) {
     const { query = {} } = params;
     const { contentSearch } = query;
@@ -65,6 +52,7 @@ export class Articles extends Service<Data> {
     return result;
   }
 
+  // TODO: extract to hook?
   async remove(id: Id, params: Params) {
     const article = await super.remove(id, params);
 

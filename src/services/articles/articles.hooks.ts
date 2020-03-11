@@ -1,17 +1,19 @@
 import { authenticate } from '@feathersjs/authentication';
 import protectPrivateArticles from './hooks/protect-private-articles';
 import exposeUserData from '../../hooks/expose-user-data';
-import populateArticle from './hooks/populate-article';
+import populateArticleContent from './hooks/populate-article-content';
 import updateArticleContentFile from './hooks/update-article-content-file';
 import { authorPermission, limitToUser, setUserId } from '../../hooks/common';
+import populateArticleComments from './hooks/populate-article-comments';
+import contentSearch from './hooks/content-search';
 
 const { required } = require('feathers-hooks-common');
 
 export default {
   before: {
     all: [],
-    find: [],
-    get: [],
+    find: [contentSearch()],
+    get: [populateArticleComments],
     create: [
       authenticate('jwt'),
       authorPermission,
@@ -27,10 +29,10 @@ export default {
   after: {
     all: [],
     find: [],
-    get: [exposeUserData(), protectPrivateArticles(), populateArticle()],
-    create: [populateArticle()],
-    update: [populateArticle()],
-    patch: [populateArticle()],
+    get: [exposeUserData(), protectPrivateArticles(), populateArticleContent()],
+    create: [populateArticleContent()],
+    update: [populateArticleContent()],
+    patch: [populateArticleContent()],
     remove: [],
   },
 

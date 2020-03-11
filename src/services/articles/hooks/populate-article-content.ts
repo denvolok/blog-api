@@ -3,7 +3,7 @@ import { ServiceModels } from '../../../declarations';
 import logger from '../../../logger';
 
 
-const populateArticle = (): Hook => async (context: HookContext<ServiceModels['articles']>) => {
+const populateArticleContent = (): Hook => async (context: HookContext<ServiceModels['articles']>) => {
   if (context.result && !context.params.skipPopulation) {
     const { content: id } = context.result;
 
@@ -25,4 +25,4 @@ const populateArticle = (): Hook => async (context: HookContext<ServiceModels['a
   return context;
 };
 
-export default populateArticle;
+export default populateArticleContent;
