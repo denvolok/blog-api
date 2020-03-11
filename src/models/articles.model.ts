@@ -32,8 +32,11 @@ export default function (app: Application) {
   });
 
   (articles as any).associate = function (models: any) {
-    this.belongsTo(models.users);
-    this.hasMany(models.comments, { onDelete: 'CASCADE', hooks: true });
+    this.hasMany(models.comments, {
+      onDelete: 'CASCADE',
+      hooks: true,
+      foreignKey: { name: 'articleId', allowNull: false },
+    });
   };
 
   return articles;

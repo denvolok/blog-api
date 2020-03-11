@@ -16,7 +16,7 @@ export default {
       authenticate('jwt'),
       authorPermission,
       setUserId,
-      required('title', 'userId'),
+      required('title'),
       updateArticleContentFile(),
     ],
     update: [authenticate('jwt'), limitToUser, updateArticleContentFile()],

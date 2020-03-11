@@ -15,21 +15,7 @@ export default function (app: Application) {
         options.raw = true;
       },
     },
-    validate: {
-      hasForeignKeys() {
-        if (!this.userId) {
-          throw new Error('Missing required field \'authorId\'');
-        }
-        if (!this.articleId) {
-          throw new Error('Missing required field \'articleId\'');
-        }
-      },
-    },
   });
-
-  (comments as any).associate = function (models: any) {
-    this.belongsTo(models.users);
-  };
 
   return comments;
 }
