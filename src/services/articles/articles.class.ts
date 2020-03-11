@@ -1,5 +1,5 @@
 import { Service, SequelizeServiceOptions } from 'feathers-sequelize';
-import { Id, Params } from '@feathersjs/feathers';
+import { Id, Paginated, Params } from '@feathersjs/feathers';
 import { Application } from '../../declarations';
 
 
@@ -20,7 +20,7 @@ declare module '../../declarations' {
   }
 }
 
-export class Articles extends Service {
+export class Articles extends Service<Data> {
   app: Application;
 
   constructor(options: Partial<SequelizeServiceOptions>, app: Application) {
@@ -44,8 +44,14 @@ export class Articles extends Service {
   async remove(id: Id, params: Params) {
     const article = await super.remove(id, params);
 
-    await this.app.service('uploads').remove(article.content);
-    article.content = '';
+    if (article instanceof Array) {
+      const promises = article.map((a) => this.app.service('uploads').remove(a.content));
+
+      await Promise.all(promises);
+    } else {
+      await this.app.service('uploads').remove(article.content);
+      article.content = '';
+    }
 
     return article;
   }

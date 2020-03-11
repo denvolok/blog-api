@@ -4,7 +4,7 @@ import logger from '../logger';
 
 
 /**
- * Creates or updates content files.
+ * Creates or updates files with articles content.
  */
 const updateArticleContentFile = (): Hook => async (context: HookContext<ServiceModels['articles']>) => {
   if (context.type === 'before' && context.data && context.data.content) {
@@ -25,7 +25,7 @@ const updateArticleContentFile = (): Hook => async (context: HookContext<Service
     }
 
     // Create new one
-    const path = `articles/${title.replace(' ', '_')}.${Date.now()}.txt`;
+    const path = `uploads/articles/${title.replace(/\s/g, '_')}.${Date.now()}.txt`;
     const file = await context.app.service('uploads').create({
       id: path,
       buffer: Buffer.from(content),

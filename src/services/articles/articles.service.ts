@@ -14,6 +14,7 @@ export default function (app: Application) {
   const options = {
     Model: createModel(app),
     paginate: app.get('paginate'),
+    multi: ['remove'],
   };
 
   app.use('/articles', new Articles(options, app));

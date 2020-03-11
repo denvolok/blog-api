@@ -5,7 +5,7 @@ import hooks from './uploads.hooks';
 const Blob = require('feathers-blob');
 const fs = require('fs-blob-store');
 
-const blobStorage = fs('uploads');
+const blobStorage = fs('.');
 
 
 declare module '../../declarations' {
