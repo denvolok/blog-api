@@ -1,6 +1,6 @@
 import { Hook, HookContext } from '@feathersjs/feathers';
 import { Forbidden } from '@feathersjs/errors';
-import { ServiceModels } from '../declarations';
+import { ServiceModels } from '../../../declarations';
 
 
 /**

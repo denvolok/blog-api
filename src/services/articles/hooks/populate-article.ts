@@ -1,6 +1,6 @@
 import { Hook, HookContext } from '@feathersjs/feathers';
-import { ServiceModels } from '../declarations';
-import logger from '../logger';
+import { ServiceModels } from '../../../declarations';
+import logger from '../../../logger';
 
 
 const populateArticle = (): Hook => async (context: HookContext<ServiceModels['articles']>) => {

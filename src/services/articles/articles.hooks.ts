@@ -1,8 +1,8 @@
 import { authenticate } from '@feathersjs/authentication';
-import protectPrivateArticles from '../../hooks/protect-private-articles';
+import protectPrivateArticles from './hooks/protect-private-articles';
 import exposeUserData from '../../hooks/expose-user-data';
-import populateArticle from '../../hooks/populate-article';
-import updateArticleContentFile from '../../hooks/update-article-content-file';
+import populateArticle from './hooks/populate-article';
+import updateArticleContentFile from './hooks/update-article-content-file';
 import { authorPermission, limitToUser, setUserId } from '../../hooks/common';
 
 const { required } = require('feathers-hooks-common');
