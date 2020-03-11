@@ -1,6 +1,8 @@
-import { Service, SequelizeServiceOptions } from 'feathers-sequelize';
-import { Id, Paginated, Params } from '@feathersjs/feathers';
+import { SequelizeServiceOptions, Service } from 'feathers-sequelize';
+import { Id, Params } from '@feathersjs/feathers';
 import { Application } from '../../declarations';
+import searchInFile from '../../utils/searchInFile';
+import { isPaginated } from '../../utils';
 
 
 interface Data {
@@ -39,6 +41,28 @@ export class Articles extends Service<Data> {
     };
 
     return super.get(id, updatedParams);
+  }
+
+  async find(params: Params) {
+    const { query = {} } = params;
+    const { contentSearch } = query;
+    delete query.contentSearch;
+
+    const result = await super.find(params);
+
+    if (contentSearch && isPaginated<Data>(result)) {
+      const pattern = contentSearch;
+      const promises = result.data.map((article) => searchInFile(article.content, pattern));
+      const searchResults = await Promise.all(promises);
+
+      result.data = result.data
+        // Populate article objects with search data
+        .map((article, i) => ({ ...article, search: searchResults[i] }))
+        // Filter matching articles
+        .filter((article) => !!article.search);
+    }
+
+    return result;
   }
 
   async remove(id: Id, params: Params) {
