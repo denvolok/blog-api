@@ -1,5 +1,5 @@
-import { Service, SequelizeServiceOptions } from 'feathers-sequelize';
-import { Id, Params } from '@feathersjs/feathers';
+import { SequelizeServiceOptions, Service } from 'feathers-sequelize';
+import { Id } from '@feathersjs/feathers';
 import { Application } from '../../declarations';
 
 
@@ -15,32 +15,12 @@ interface Data {
 
 declare module '../../declarations' {
   interface ServiceModels {
-    'users': Data;
+    users: Data;
   }
 }
 
 export class Users extends Service {
-  app: Application;
-
   constructor(options: Partial<SequelizeServiceOptions>, app: Application) {
     super(options);
-    this.app = app;
-  }
-
-  async get(id: Id, params: Params) {
-    const newParams: Params = params || {};
-
-    // Populate with additional data
-    if (newParams.query && newParams.query.detailed === 'true') {
-      delete newParams.query.detailed;
-
-      newParams.sequelize = {
-        ...newParams.sequelize,
-        raw: false,
-        include: this.app.service('comments').getModel(params),
-      };
-    }
-
-    return super.get(id, newParams);
   }
 }

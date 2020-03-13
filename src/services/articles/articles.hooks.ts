@@ -6,9 +6,9 @@ import exposeUserData from '../../hooks/expose-user-data';
 import populateArticleContent from './hooks/populate-article-content';
 import updateArticleContentFile from './hooks/update-article-content-file';
 import { limitToUser, setUserId } from '../../hooks/common';
-import populateArticleComments from './hooks/populate-article-comments';
 import contentSearch from './hooks/content-search';
 import removeContentFiles from './hooks/remove-content-files';
+import fetchAssociations from '../../hooks/fetch-associations';
 
 const { required } = require('feathers-hooks-common');
 
@@ -18,7 +18,7 @@ export default {
     find: [
       iff(isProvider('external'), contentSearch()),
     ],
-    get: [populateArticleComments()],
+    get: [fetchAssociations('comments')],
     create: [
       authenticate('jwt'),
       checkPermissions({ roles: ['author'] }),
