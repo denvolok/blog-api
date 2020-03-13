@@ -29,6 +29,7 @@ module.exports = {
     'lines-between-class-members': ['error', 'always',  {exceptAfterSingleLine: true}],
     'consistent-return': 0,
     'import/no-unused-modules': [2, {'unusedExports': true}],
+    'no-return-assign': [2, 'except-parens'],
     'object-curly-newline': ['error', {
       ImportDeclaration: 'never',
     }],

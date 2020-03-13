@@ -12,9 +12,10 @@ import { ServiceModels } from '../../../declarations';
 const contentSearch = (): Hook => async (context: HookContext<ServiceModels['articles']>) => {
   const { app, params } = context;
   const { query = {} } = params;
-
   const { contentSearch: search } = query;
+
   delete query.contentSearch;
+  delete params.provider;
 
   const result = await app.service('articles').find(params);
 
