@@ -4,7 +4,7 @@ import { Application } from '../declarations';
 
 export default function (app: Application) {
   const sequelizeClient: Sequelize = app.get('sequelizeClient');
-  const articles = sequelizeClient.define('articles', {
+  const articles = sequelizeClient.define('Articles', {
     title: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -32,7 +32,7 @@ export default function (app: Application) {
   });
 
   (articles as any).associate = function (models: any) {
-    this.hasMany(models.comments, {
+    this.hasMany(models.Comments, {
       onDelete: 'CASCADE',
       hooks: true,
       foreignKey: { name: 'articleId', allowNull: false },

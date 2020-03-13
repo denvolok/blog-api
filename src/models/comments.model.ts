@@ -3,7 +3,7 @@ import { Application } from '../declarations';
 
 export default function (app: Application) {
   const sequelizeClient: Sequelize = app.get('sequelizeClient');
-  const comments = sequelizeClient.define('comments', {
+  const comments = sequelizeClient.define('Comments', {
     text: {
       type: DataTypes.STRING,
       allowNull: false,
