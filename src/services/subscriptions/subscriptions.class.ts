@@ -5,9 +5,18 @@ import { Application } from '../../declarations';
 
 interface Data {
   authorId: Id;
+  userId: Id;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 interface ServiceOptions {}
+
+declare module '../../declarations' {
+  interface ServiceModels {
+    subscriptions: Data;
+  }
+}
 
 /**
  * 'Get' methods not implemented, because 'user' model can populate subscriptions.

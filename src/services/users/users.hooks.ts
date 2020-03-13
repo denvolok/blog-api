@@ -2,6 +2,7 @@ import * as feathersAuthentication from '@feathersjs/authentication';
 import * as local from '@feathersjs/authentication-local';
 import { iff, isProvider } from 'feathers-hooks-common';
 import fetchAssociations from '../../hooks/fetch-associations';
+import fetchSubscriptions from './hooks/fetch-subscriptions';
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const { authenticate } = feathersAuthentication.hooks;
@@ -24,7 +25,9 @@ export default {
   after: {
     all: [protect('password')],
     find: [],
-    get: [],
+    get: [
+      iff(isProvider('rest'), fetchSubscriptions()),
+    ],
     create: [],
     update: [],
     patch: [],
