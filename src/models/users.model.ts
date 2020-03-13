@@ -41,6 +41,19 @@ export default function (app: Application) {
       hooks: true,
       foreignKey: { name: 'userId', allowNull: false },
     });
+
+
+    this.belongsToMany(models.users, {
+      through: 'subscribers',
+      as: 'subscriptions',
+      foreignKey: 'userId',
+    });
+
+    this.belongsToMany(models.users, {
+      through: 'subscribers',
+      as: 'subs',
+      foreignKey: 'authorId',
+    });
   };
 
   return users;
