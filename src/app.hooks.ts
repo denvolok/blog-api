@@ -28,7 +28,7 @@ export default {
   },
 
   error: {
-    all: [limitToUserHandler],
+    all: [limitToUserHandler()],
     find: [],
     get: [],
     create: [],

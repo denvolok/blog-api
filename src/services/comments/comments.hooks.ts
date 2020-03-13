@@ -9,10 +9,10 @@ export default {
     all: [],
     find: [],
     get: [],
-    create: [authenticate('jwt'), setUserId],
-    update: [authenticate('jwt'), limitToUser],
-    patch: [authenticate('jwt'), limitToUser],
-    remove: [authenticate('jwt'), limitToUser],
+    create: [authenticate('jwt'), setUserId()],
+    update: [authenticate('jwt'), limitToUser()],
+    patch: [authenticate('jwt'), limitToUser()],
+    remove: [authenticate('jwt'), limitToUser()],
   },
 
   after: {
