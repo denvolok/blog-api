@@ -1,10 +1,10 @@
-import { DataTypes, Sequelize } from 'sequelize';
+import { Sequelize, DataTypes } from 'sequelize';
 import { Application } from '../declarations';
 
 
 export default function (app: Application) {
   const sequelizeClient: Sequelize = app.get('sequelizeClient');
-  const users = sequelizeClient.define('Users', {
+  const users = sequelizeClient.define('users', {
 
     email: {
       type: DataTypes.STRING,
@@ -30,13 +30,13 @@ export default function (app: Application) {
   });
 
   (users as any).associate = function (models: any) {
-    this.hasMany(models.Comments, {
+    this.hasMany(models.comments, {
       onDelete: 'CASCADE',
       hooks: true,
       foreignKey: { name: 'userId', allowNull: false },
     });
 
-    this.hasMany(models.Articles, {
+    this.hasMany(models.articles, {
       onDelete: 'CASCADE',
       hooks: true,
       foreignKey: { name: 'userId', allowNull: false },
