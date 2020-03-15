@@ -10,18 +10,18 @@ const getUrl = (pathname?: string) => url.format({
   hostname: app.get('host') || 'localhost',
   protocol: 'http',
   port,
-  pathname
+  pathname,
 });
 
 describe('Feathers application tests (with jest)', () => {
   let server: Server;
 
-  beforeAll(done => {
+  beforeAll((done) => {
     server = app.listen(port);
     server.once('listening', () => done());
   });
 
-  afterAll(done => {
+  afterAll((done) => {
     server.close(done);
   });
 
@@ -40,8 +40,8 @@ describe('Feathers application tests (with jest)', () => {
       try {
         await axios.get(getUrl('path/to/nowhere'), {
           headers: {
-            'Accept': 'text/html'
-          }
+            Accept: 'text/html',
+          },
         });
       } catch (error) {
         const { response } = error;
@@ -53,7 +53,7 @@ describe('Feathers application tests (with jest)', () => {
 
     it('shows a 404 JSON error without stack trace', async () => {
       expect.assertions(4);
-      
+
       try {
         await axios.get(getUrl('path/to/nowhere'));
       } catch (error) {
