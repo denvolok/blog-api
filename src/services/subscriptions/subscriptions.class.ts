@@ -1,6 +1,6 @@
 import { Id, Params } from '@feathersjs/feathers';
 import { BadRequest } from '@feathersjs/errors';
-import { Application } from '../../declarations';
+import { Application, ServiceModels } from '../../declarations';
 
 
 interface Data {
@@ -32,17 +32,19 @@ export class Subscriptions {
 
   // TODO:
   // - payment gateway
-  // - error handling
-  // - add 'subscriber' role
   // eslint-disable-next-line class-methods-use-this
   async create(data: Partial<Data>, params: Params) {
     const { user, author } = params;
 
-    if (user.id === author.id) {
-      throw new BadRequest('Author equals user');
-    }
+    if (user.id === author.id) throw new BadRequest('Author equals user');
 
-    await user.addSubscription(author);
+    const subscription = await user.addSubscription(author);
+    if (!subscription) throw new BadRequest('User is already subscribed to the author');
+
+    if (!user.permissions.includes('subscriber')) {
+      const permissions = [...user.permissions, 'subscriber'];
+      await this.app.service('users').patch(user.id, { permissions });
+    }
 
     return null;
   }
@@ -52,10 +54,10 @@ export class Subscriptions {
     const { user, author } = params;
 
     const subscription = await user.removeSubscription(author);
+    if (!subscription) throw new BadRequest('Subscription not found');
 
-    if (!subscription) {
-      throw new BadRequest('Subscription not found');
-    }
+    const permissions = (user as ServiceModels['users']).permissions.filter((p) => p !== 'subscriber');
+    await this.app.service('users').patch(user.id, { permissions });
 
     return null;
   }
