@@ -17,7 +17,7 @@ export default function (app: Application) {
     },
     permissions: {
       type: DataTypes.ARRAY(DataTypes.ENUM('author', 'subscriber', 'follower')),
-      defaultValue: ['follower'],
+      defaultValue: [],
     },
 
   }, {

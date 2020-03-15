@@ -9,7 +9,7 @@ import { ServiceModels } from '../../../declarations';
 const protectPrivateArticles = (): Hook => async (context: HookContext<ServiceModels['articles']>) => {
   const { result: article } = context;
 
-  if (article && article.isPrivate) {
+  if (article?.isPrivate) {
     const user = (context.params.user as ServiceModels['users']);
 
     if (!user) throw new Forbidden('Private articles only for subscribers');

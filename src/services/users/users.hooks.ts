@@ -3,6 +3,7 @@ import * as local from '@feathersjs/authentication-local';
 import { iff, isProvider } from 'feathers-hooks-common';
 import fetchAssociations from '../../hooks/fetch-associations';
 import fetchSubscriptions from './hooks/fetch-subscriptions';
+import disallowFields from '../../hooks/disallow-fields';
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const { authenticate } = feathersAuthentication.hooks;
@@ -16,9 +17,20 @@ export default {
       authenticate('jwt'),
       iff(isProvider('rest'), fetchAssociations('comments', 'articles')),
     ],
-    create: [hashPassword('password')],
-    update: [hashPassword('password'), authenticate('jwt')],
-    patch: [hashPassword('password'), authenticate('jwt')],
+    create: [
+      disallowFields('permissions'),
+      hashPassword('password'),
+    ],
+    update: [
+      disallowFields('permissions'),
+      hashPassword('password'),
+      authenticate('jwt'),
+    ],
+    patch: [
+      disallowFields('permissions'),
+      hashPassword('password'),
+      authenticate('jwt'),
+    ],
     remove: [authenticate('jwt')],
   },
 

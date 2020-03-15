@@ -8,7 +8,7 @@ export const limitToUserHandler = (): Hook => (context: HookContext) => {
   const { error = { message: '' } } = context;
   const str = ' (limited to the user)';
 
-  if (context.params && context.params.limitedToUser && !error.message.includes(str)) {
+  if (context.params?.limitedToUser && !error.message.includes(str)) {
     error.message += str;
   }
 
