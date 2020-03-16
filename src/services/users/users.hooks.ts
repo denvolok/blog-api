@@ -4,6 +4,7 @@ import { iff, isProvider } from 'feathers-hooks-common';
 import fetchAssociations from '../../hooks/fetch-associations';
 import fetchSubscriptions from './hooks/fetch-subscriptions';
 import disallowFields from '../../hooks/disallow-fields';
+import getSequelizeInstance from '../../hooks/get-sequelize-instance';
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const { authenticate } = feathersAuthentication.hooks;
@@ -15,6 +16,7 @@ export default {
     find: [authenticate('jwt')],
     get: [
       authenticate('jwt'),
+      iff(isProvider('rest'), getSequelizeInstance({ key: 'userInstance' })),
       iff(isProvider('rest'), fetchAssociations('comments', 'articles')),
     ],
     create: [

@@ -8,10 +8,7 @@ import { ServiceModels } from '../../../declarations';
  * Use as 'after' hook.
  */
 const fetchSubscriptions = (): Hook => async (context: HookContext) => {
-  const { app } = context;
-  const { id } = context.result;
-
-  const user = await app.service('users').get(id, { sequelize: { raw: false } });
+  const user = context.params.userInstance;
 
   // eslint-disable-next-line no-param-reassign
   context.result.subscriptions = await user.getSubscriptions()
