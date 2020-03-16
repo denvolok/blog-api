@@ -1,1 +1,9 @@
-{}
+{
+  "host": "localhost",
+  "port": 3031,
+  "paginate": {
+    "default": 5,
+    "max": 10
+  },
+  "postgres": "postgres://postgres:@localhost:5432/blog_api_test"
+}

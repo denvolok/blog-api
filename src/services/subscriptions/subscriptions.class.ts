@@ -1,5 +1,5 @@
 import { Id, Params } from '@feathersjs/feathers';
-import { BadRequest } from '@feathersjs/errors';
+import { BadRequest, GeneralError } from '@feathersjs/errors';
 import { Application, ServiceModels } from '../../declarations';
 
 
@@ -33,7 +33,9 @@ export class Subscriptions {
   // TODO:
   // - payment gateway
   // eslint-disable-next-line class-methods-use-this
-  async create(data: Partial<Data>, params: Params) {
+  async create(data: Partial<Data>, params?: Params) {
+    if (!params?.user || !params?.author) throw new GeneralError('Bad service params provided');
+
     const { user, author } = params;
 
     if (user.id === author.id) throw new BadRequest('Author equals user');

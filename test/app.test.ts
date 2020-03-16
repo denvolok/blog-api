@@ -1,4 +1,3 @@
-import assert from 'assert';
 import { Server } from 'http';
 import url from 'url';
 import axios from 'axios';
@@ -16,6 +15,7 @@ const getUrl = (pathname?: string) => url.format({
 describe('Feathers application tests (with jest)', () => {
   let server: Server;
 
+  // TODO: sequelize truncate?
   beforeAll((done) => {
     server = app.listen(port);
     server.once('listening', () => done());

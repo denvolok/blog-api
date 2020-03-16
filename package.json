@@ -53,6 +53,7 @@
     "feathers-authentication-hooks": "^1.0.2",
     "feathers-blob": "^2.2.0",
     "feathers-hooks-common": "^5.0.2",
+    "feathers-memory": "^4.1.0",
     "feathers-permissions": "^2.0.1",
     "feathers-sequelize": "^6.1.0",
     "fs-blob-store": "^5.2.1",

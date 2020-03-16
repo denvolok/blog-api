@@ -14,7 +14,7 @@ const fetchSubscriptions = (): Hook => async (context: HookContext) => {
   context.result.subscriptions = await user.getSubscriptions()
     .then((subscriptions: ServiceModels['users'][]) => subscriptions.map((sub) => ({
       authorId: sub.id,
-      createdAd: sub.subscribers.createdAt,
+      createdAt: sub.subscribers.createdAt,
       updatedAt: sub.subscribers.updatedAt,
     })));
 
@@ -23,7 +23,7 @@ const fetchSubscriptions = (): Hook => async (context: HookContext) => {
     context.result.subscribers = await user.getSubs()
       .then((subscriptions: ServiceModels['users'][]) => subscriptions.map((sub) => ({
         subId: sub.id,
-        createdAd: sub.subscribers.createdAt,
+        createdAt: sub.subscribers.createdAt,
         updatedAt: sub.subscribers.updatedAt,
       })));
   }
