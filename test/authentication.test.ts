@@ -1,6 +1,6 @@
 import app from '../src/app';
 
-describe('authentication', () => {
+describe.skip('authentication', () => {
   it('registered the authentication service', () => {
     expect(app.service('authentication')).toBeTruthy();
   });
@@ -20,6 +20,7 @@ describe('authentication', () => {
     });
 
     it('authenticates user and creates accessToken', async () => {
+      // TODO: delete the user after testing
       const { user, accessToken } = await app.service('authentication').create({
         strategy: 'local',
         ...userInfo,

@@ -1,15 +1,8 @@
-import app from '../../src/app';
 import fetchSubscriptions from '../../src/services/users/hooks/fetch-subscriptions';
-import { testContext, testUser, testUser2 } from '../../src/utils/mocks';
+import { testContext, testUser, testUser2 } from '../../src/utils/testing/test-utils';
 
 
 describe('\'users\' service', () => {
-  it('registered the service', () => {
-    const service = app.service('articles');
-    expect(service).toBeTruthy();
-  });
-
-
   it('\'fetch-subscriptions\' hook', async () => {
     const subscriptions = [
       { ...testUser, subscribers: { createdAt: '1/11/2020', updatedAt: '2/11/2020' } },
