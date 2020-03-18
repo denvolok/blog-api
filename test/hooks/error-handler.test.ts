@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep';
-import { testContext } from '../../src/utils/testing/test-utils';
 import { limitToUserHandler } from '../../src/hooks/error-handlers';
+import { testContext } from '../../src/utils/testing';
 
 
 describe('\'error-handlers\' hooks', () => {

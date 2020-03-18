@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep';
-import { testContext } from '../../src/utils/testing/test-utils';
 import disallowFields from '../../src/hooks/disallow-fields';
+import { testContext } from '../../src/utils/testing';
 
 
 describe('\'disallow-fields\' hook', () => {

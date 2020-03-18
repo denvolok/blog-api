@@ -1,5 +1,5 @@
 import { protectTimestamps } from '../../src/hooks/common';
-import { testContext } from '../../src/utils/testing/test-utils';
+import { testContext } from '../../src/utils/testing';
 
 /**
  * @c-pragma c-value

@@ -1,9 +1,9 @@
-import fetchSubscriptions from '../../src/services/users/hooks/fetch-subscriptions';
-import { testContext, testUser, testUser2 } from '../../src/utils/testing/test-utils';
+import fetchSubscriptions from '../../../src/services/users/hooks/fetch-subscriptions';
+import { testContext, testUser, testUser2 } from '../../../src/utils/testing';
 
 
-describe('\'users\' service', () => {
-  it('\'fetch-subscriptions\' hook', async () => {
+describe('\'fetch-subscriptions\' hook', () => {
+  it('fetches subscriptions', async () => {
     const subscriptions = [
       { ...testUser, subscribers: { createdAt: '1/11/2020', updatedAt: '2/11/2020' } },
     ];

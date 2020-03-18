@@ -1,5 +1,6 @@
-import { TestService, testContext } from '../../src/utils/testing/test-utils';
+import { TestService} from '../../src/utils/testing/testing-service';
 import getSequelizeInstance from '../../src/hooks/get-sequelize-instance';
+import { testContext } from '../../src/utils/testing';
 
 
 const testApp = new TestService('sequelize');
