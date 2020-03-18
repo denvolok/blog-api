@@ -7,7 +7,12 @@ import { Sequelize } from 'sequelize';
 import memory from 'feathers-memory';
 import * as util from 'util';
 import sequelize from '../../sequelize';
-import srcApp from '../../app';
+
+
+const Blob = require('feathers-blob');
+const fs = require('fs-blob-store');
+
+const blobStorage = fs('.');
 
 
 export class TestService {
@@ -41,17 +46,20 @@ export class TestService {
   }
 
   async createTextFile(content: string) {
-    return srcApp.service('uploads').create({
+    return this.app.service('uploads').create({
       id: this.getNewFileId(),
       buffer: Buffer.from(content),
       contentType: 'text/plain',
     });
   }
 
+  // TODO: refactor when will be useful(maybe use for some services from (this.services))
   private async setupSequelize() {
     // console.log('>> Running sequelize setup');
 
     if (!this.sequelize) throw new Error('Sequelize service not initialized');
+
+    await this.setupCommon();
 
     const promises = this.services.map((service) => Promise.resolve()
       .then(() => import(`../../models/${service}.model.ts`))
@@ -75,7 +83,20 @@ export class TestService {
 
   private async setupMemory() {
     // console.log('>> Running memory setup');
-    this.app.use('/tests', memory({}));
+    await this.setupCommon();
+    this.app.use('/tests', memory({ paginate: { default: 2, max: 4 } }));
+  }
+
+  private async setupCommon() {
+    if (this.services.includes('uploads')) {
+      const options = {
+        Model: blobStorage,
+        returnUri: false,
+        returnBuffer: true,
+      };
+
+      this.app.use('/uploads', new Blob(options));
+    }
   }
 
   private destroyMemory = async () => {
