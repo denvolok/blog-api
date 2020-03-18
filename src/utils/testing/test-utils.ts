@@ -1,25 +1,25 @@
 import feathers, { HookContext } from '@feathersjs/feathers';
 import express, { Application } from '@feathersjs/express';
 import configuration from '@feathersjs/configuration';
-import { Service } from 'feathers-sequelize';
-import { DataTypes, Sequelize } from 'sequelize';
+import { Service as SequelizeService } from 'feathers-sequelize';
+import { Sequelize } from 'sequelize';
 import memory from 'feathers-memory';
 import sequelize from '../../sequelize';
 
 
-// TODO:
-// - connect actual models(with mock services/hooks)
-export class TestApp {
+export class TestService {
   app: Application;
+  services: string[];
   sequelize?: Sequelize;
   setup: () => any;
   destroy: () => any;
 
-  constructor(storageService: 'sequelize' | 'memory') {
+  constructor(storageService: 'sequelize' | 'memory' = 'memory', servicesToInit?: string[]) {
     const app = express(feathers());
 
     app.configure(configuration());
     this.app = app;
+    this.services = servicesToInit || [];
 
     switch (storageService) {
       case 'sequelize':
@@ -37,38 +37,37 @@ export class TestApp {
     }
   }
 
-  async setupSequelize() {
+  private async setupSequelize() {
     // console.log('>> Running sequelize setup');
 
     if (!this.sequelize) throw new Error('Sequelize service not initialized');
 
-    // Abstract testing model
-    const testModel = this.sequelize.define('tests', {
-      text: {
-        type: DataTypes.STRING,
-      },
-    });
-
     // Drop test tables before each test suite
     await this.sequelize.getQueryInterface().dropAllTables();
 
+    const promises = this.services.map((service) => Promise.resolve()
+      .then(() => import(`../../models/${service}.model.ts`))
+      .then((createModel) => {
+        // Associations ignored
+        this.app.use(`/${service}`, new SequelizeService({ Model: createModel.default(this.app), multi: true }));
+      }));
 
-    this.app.use('/tests', new Service({ Model: testModel, multi: true }));
+    await Promise.all(promises);
     await this.sequelize.sync();
 
     return this.app;
   }
 
-  async destroySequelize() {
+  private async destroySequelize() {
     await this.sequelize?.close();
   }
 
-  async setupMemory() {
+  private async setupMemory() {
     // console.log('>> Running memory setup');
     this.app.use('/tests', memory({}));
   }
 
-  destroyMemory = async () => null;
+  private destroyMemory = async () => null;
 }
 
 //

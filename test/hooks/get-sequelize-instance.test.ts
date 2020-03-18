@@ -1,8 +1,8 @@
-import { TestApp, testContext } from '../../src/utils/testing/test-utils';
+import { TestService, testContext } from '../../src/utils/testing/test-utils';
 import getSequelizeInstance from '../../src/hooks/get-sequelize-instance';
 
 
-const testApp = new TestApp('sequelize');
+const testApp = new TestService('sequelize');
 
 beforeAll(() => testApp.setup());
 afterAll(() => testApp.destroy());

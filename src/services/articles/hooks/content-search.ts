@@ -5,7 +5,6 @@ import { ServiceModels } from '../../../declarations';
 
 
 /**
- * TODO: handle recursion and remove 'find' method
  * Searches for the pattern in articles files if 'contentSearch' in the query.
  * Sets the 'result' field, so the service method call will be skipped.
  */
