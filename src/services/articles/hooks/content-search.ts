@@ -29,6 +29,7 @@ const contentSearch = (): Hook => async (context: HookContext<ServiceModels['art
       .filter((article) => !!article.search);
   }
 
+  result.total = result.data.length;
   // eslint-disable-next-line no-param-reassign
   context.result = result;
   return context;
