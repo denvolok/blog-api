@@ -1,9 +1,11 @@
 import feathers, { HookContext } from '@feathersjs/feathers';
 import express, { Application } from '@feathersjs/express';
+import rimraf from 'rimraf';
 import configuration from '@feathersjs/configuration';
 import { Service as SequelizeService } from 'feathers-sequelize';
 import { Sequelize } from 'sequelize';
 import memory from 'feathers-memory';
+import * as util from 'util';
 import sequelize from '../../sequelize';
 
 
@@ -42,9 +44,6 @@ export class TestService {
 
     if (!this.sequelize) throw new Error('Sequelize service not initialized');
 
-    // Drop test tables before each test suite
-    await this.sequelize.getQueryInterface().dropAllTables();
-
     const promises = this.services.map((service) => Promise.resolve()
       .then(() => import(`../../models/${service}.model.ts`))
       .then((createModel) => {
@@ -59,7 +58,10 @@ export class TestService {
   }
 
   private async destroySequelize() {
+    // Drop test tables after each test suite
+    await this.sequelize?.getQueryInterface().dropAllTables();
     await this.sequelize?.close();
+    await this.destroyCommon();
   }
 
   private async setupMemory() {
@@ -67,7 +69,14 @@ export class TestService {
     this.app.use('/tests', memory({}));
   }
 
-  private destroyMemory = async () => null;
+  private destroyMemory = async () => {
+    await this.destroyCommon();
+  };
+
+  private destroyCommon = async () => {
+    const rm = util.promisify(rimraf);
+    await rm('uploads/test');
+  };
 }
 
 //
