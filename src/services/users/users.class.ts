@@ -1,6 +1,7 @@
 import { SequelizeServiceOptions, Service } from 'feathers-sequelize';
 import { Id } from '@feathersjs/feathers';
 import { Application, ServiceModels } from '../../declarations';
+import { Subscriber, Subscription } from '../subscriptions/subscriptions.class';
 
 
 interface Data {
@@ -10,9 +11,11 @@ interface Data {
   permissions: string[];
   createdAt: Date;
   updatedAt: Date;
-  // this field added by sequelize after fetching corresponding associations,
+  // This field added by sequelize after fetching corresponding associations,
   // it contains a row from 'subscriptions' table, not actual subscribers
   subscribers: ServiceModels['subscriptions'];
+  subscriptions?: Subscription[];
+  subs?: Subscriber[];
 }
 
 

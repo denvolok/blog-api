@@ -15,6 +15,8 @@ interface Params {
  * @param {string} key - instance will be stored under 'context.params[key]'
  */
 const getSequelizeInstance = ({ id, key }: Params): Hook => async (context: HookContext) => {
+  if (context.params.provider !== 'rest') return context;
+
   const { service } = context;
   const entityId = id || context.id || 0;
 

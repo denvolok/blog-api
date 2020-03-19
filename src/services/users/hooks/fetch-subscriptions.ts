@@ -20,7 +20,7 @@ const fetchSubscriptions = (): Hook => async (context: HookContext) => {
 
   if (user.permissions.includes('author')) {
     // eslint-disable-next-line no-param-reassign
-    context.result.subscribers = await user.getSubs()
+    context.result.subs = await user.getSubs()
       .then((subscriptions: ServiceModels['users'][]) => subscriptions.map((sub) => ({
         subId: sub.id,
         createdAt: sub.subscribers.createdAt,

@@ -16,7 +16,7 @@ export default {
     find: [authenticate('jwt')],
     get: [
       authenticate('jwt'),
-      iff(isProvider('rest'), getSequelizeInstance({ key: 'userInstance' })),
+      getSequelizeInstance({ key: 'userInstance' }),
       iff(isProvider('rest'), fetchAssociations('comments', 'articles')),
     ],
     create: [

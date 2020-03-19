@@ -6,8 +6,20 @@ import { Application, ServiceModels } from '../../declarations';
 interface Data {
   authorId: Id;
   userId: Id;
-  createdAt: Date;
-  updatedAt: Date;
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
+}
+
+export interface Subscription {
+  authorId: Id;
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
+}
+
+export interface Subscriber {
+  subId: Id;
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
 }
 
 interface ServiceOptions {}

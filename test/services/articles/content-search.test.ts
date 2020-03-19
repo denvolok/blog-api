@@ -11,7 +11,10 @@ let service: any;
 
 beforeAll(async () => {
   await testService.setup();
+
   testService.useMemory('/articles');
+  service = app.service('articles');
+  service.hooks({ before: { find: [iff(isProvider('rest'), contentSearch())] } });
 });
 
 afterAll(async () => {
@@ -20,11 +23,6 @@ afterAll(async () => {
 
 
 describe('\'contentSearch\' hook', () => {
-  beforeAll(() => {
-    service = app.service('articles');
-    service.hooks({ before: { find: [iff(isProvider('rest'), contentSearch())] } });
-  });
-
   it('should find search matches', async () => {
     const content = 'Article content\nLine with foo string';
 

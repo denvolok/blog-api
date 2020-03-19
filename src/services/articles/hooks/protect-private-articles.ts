@@ -14,13 +14,12 @@ const protectPrivateArticles = (): Hook => async (context: HookContext<ServiceMo
 
     if (!user) throw new Forbidden('Private articles only for subscribers');
 
-    const { permissions, id: userId } = user;
+    const { id: userId } = user;
+    const authorId = article.userId;
+    const subscriptions = user.subscriptions?.map((sub) => sub.authorId);
 
-    // TODO: other place
-    if (!permissions.length) throw new Error('Incorrect user permissions');
-
-    if ((!permissions.includes('subscriber') && userId !== article.userId)) {
-      throw new Error('Private articles only for subscribers');
+    if ((!subscriptions?.includes(authorId) && userId !== authorId)) {
+      throw new Forbidden('Private articles only for subscribers');
     }
   }
 
