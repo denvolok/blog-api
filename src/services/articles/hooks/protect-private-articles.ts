@@ -12,6 +12,7 @@ const protectPrivateArticles = (): Hook => async (context: HookContext<ServiceMo
   if (article?.isPrivate) {
     const user = (context.params.user as ServiceModels['users']);
 
+    // Not logged user
     if (!user) throw new Forbidden('Private articles only for subscribers');
 
     const { id: userId } = user;

@@ -3,7 +3,7 @@ import express, { Application } from '@feathersjs/express';
 import rimraf from 'rimraf';
 import configuration from '@feathersjs/configuration';
 import { Service as SequelizeService } from 'feathers-sequelize';
-import { Sequelize, Model, DataTypes } from 'sequelize';
+import { DataTypes, Model, Sequelize } from 'sequelize';
 import memory from 'feathers-memory';
 import * as util from 'util';
 import sequelize from '../../sequelize';
