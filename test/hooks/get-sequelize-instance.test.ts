@@ -1,17 +1,20 @@
-import { TestService} from '../../src/utils/testing/testing-service';
+import { TestService } from '../../src/utils/testing/testing-service';
 import getSequelizeInstance from '../../src/hooks/get-sequelize-instance';
 import { testContext } from '../../src/utils/testing';
 
 
-const testApp = new TestService('sequelize');
+const testService = new TestService();
 
-beforeAll(() => testApp.setup());
-afterAll(() => testApp.destroy());
+beforeAll(async () => {
+  await testService.setup();
+  await testService.useSequelize('/tests');
+});
+afterAll(() => testService.destroy());
 
 
 describe('\'get-sequelize-instance\' hook', () => {
   it('retrieves and passes sequelize instance', async () => {
-    const service = testApp.app.service('tests');
+    const service = testService.app.service('tests');
     const context = { ...testContext, id: 1, service };
     const model = service.getModel({});
 

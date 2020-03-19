@@ -4,14 +4,14 @@ import contentSearch from '../../../src/services/articles/hooks/content-search';
 import { testContext } from '../../../src/utils/testing';
 
 
-const testService = new TestService('memory', ['uploads']);
+const testService = new TestService(['uploads']);
 const { app } = testService;
 let service: any;
 
 
 beforeAll(async () => {
   await testService.setup();
-  app.use('/articles', app.service('tests'));
+  testService.useMemory('/articles');
 });
 
 afterAll(async () => {
@@ -21,7 +21,7 @@ afterAll(async () => {
 
 describe('\'contentSearch\' hook', () => {
   beforeAll(() => {
-    service = app.service('tests');
+    service = app.service('articles');
     service.hooks({ before: { find: [iff(isProvider('rest'), contentSearch())] } });
   });
 

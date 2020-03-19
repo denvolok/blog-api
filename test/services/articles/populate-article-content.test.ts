@@ -1,7 +1,7 @@
 import { TestService } from '../../../src/utils/testing/testing-service';
 import populateArticleContent from '../../../src/services/articles/hooks/populate-article-content';
 
-const testService = new TestService('memory', ['uploads']);
+const testService = new TestService(['uploads']);
 const { app } = testService;
 let service: any;
 

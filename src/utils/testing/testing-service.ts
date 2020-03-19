@@ -3,7 +3,7 @@ import express, { Application } from '@feathersjs/express';
 import rimraf from 'rimraf';
 import configuration from '@feathersjs/configuration';
 import { Service as SequelizeService } from 'feathers-sequelize';
-import { Sequelize } from 'sequelize';
+import { Sequelize, Model, DataTypes } from 'sequelize';
 import memory from 'feathers-memory';
 import * as util from 'util';
 import sequelize from '../../sequelize';
@@ -14,35 +14,57 @@ const fs = require('fs-blob-store');
 
 const blobStorage = fs('.');
 
+type TestServices = ('uploads' | 'subscriptions')[];
+
 
 export class TestService {
   app: Application;
-  services: string[];
+  servicesToInit: TestServices;
   sequelize?: Sequelize;
-  setup: () => any;
-  destroy: () => any;
+  uploadsDir: string;
 
-  constructor(storageService: 'sequelize' | 'memory' = 'memory', servicesToInit?: string[]) {
+  constructor(servicesToInit: TestServices = []) {
     const app = express(feathers());
 
     app.configure(configuration());
+
     this.app = app;
-    this.services = servicesToInit || [];
+    this.servicesToInit = servicesToInit;
+    this.uploadsDir = `uploads/test_${Math.floor(Math.random() * 10e7)}`;
+  }
 
-    switch (storageService) {
-      case 'sequelize':
-        app.configure(sequelize);
-        this.sequelize = app.get('sequelizeClient');
+  async setup() {
+    const services = this.servicesToInit;
 
-        this.setup = this.setupSequelize;
-        this.destroy = this.destroySequelize;
+    if (services.includes('uploads')) {
+      const options = {
+        Model: blobStorage,
+        returnUri: false,
+        returnBuffer: true,
+      };
 
-        break;
-      case 'memory':
-      default:
-        this.setup = this.setupMemory;
-        this.destroy = this.destroyMemory;
+      this.app.use('/uploads', new Blob(options));
     }
+
+    // A service for general usage
+    this.useMemory('/tests');
+  }
+
+  async useSequelize(path: string, model?: Model) {
+    if (!this.sequelize) {
+      this.app.configure(sequelize);
+      this.sequelize = this.app.get('sequelizeClient');
+    }
+
+    const defaultModel = this.sequelize?.define(path.replace('/', ''), { text: { type: DataTypes.STRING } });
+    const serviceModel = model || defaultModel;
+
+    this.app.use(path, new SequelizeService({ Model: serviceModel, multi: true }));
+    await this.sequelize?.sync();
+  }
+
+  useMemory(path: string, options: any = { paginate: { default: 2, max: 4 } }): void {
+    this.app.use(path, memory(options));
   }
 
   async createTextFile(content: string) {
@@ -53,57 +75,17 @@ export class TestService {
     });
   }
 
-  // TODO: refactor when will be useful(maybe use for some services from (this.services))
-  private async setupSequelize() {
-    // console.log('>> Running sequelize setup');
-
-    if (!this.sequelize) throw new Error('Sequelize service not initialized');
-
-    await this.setupCommon();
-
-    const promises = this.services.map((service) => Promise.resolve()
-      .then(() => import(`../../models/${service}.model.ts`))
-      .then((createModel) => {
-        // Associations ignored
-        this.app.use(`/${service}`, new SequelizeService({ Model: createModel.default(this.app), multi: true }));
-      }));
-
-    await Promise.all(promises);
-    await this.sequelize.sync();
-
-    return this.app;
-  }
-
-  private async destroySequelize() {
-    // Drop test tables after each test suite
-    await this.sequelize?.getQueryInterface().dropAllTables();
-    await this.sequelize?.close();
-    await this.destroyCommon();
-  }
-
-  private async setupMemory() {
-    // console.log('>> Running memory setup');
-    await this.setupCommon();
-    this.app.use('/tests', memory({ paginate: { default: 2, max: 4 } }));
-  }
-
-  private async setupCommon() {
-    if (this.services.includes('uploads')) {
-      const options = {
-        Model: blobStorage,
-        returnUri: false,
-        returnBuffer: true,
-      };
-
-      this.app.use('/uploads', new Blob(options));
+  async destroy() {
+    if (this.sequelize) {
+      // Drop test tables after each test suite
+      await this.sequelize.getQueryInterface().dropAllTables();
+      await this.sequelize.close();
     }
+
+    await Promise.all([
+      util.promisify(rimraf)(this.uploadsDir),
+    ]);
   }
 
-  private destroyMemory = async () => {
-    await this.destroyCommon();
-  };
-
-  private destroyCommon = async () => util.promisify(rimraf)('uploads/test');
-
-  private getNewFileId = () => `uploads/test/test.${Math.floor(Math.random() * 10e7)}.txt`;
+  private getNewFileId = () => `${this.uploadsDir}/${Math.floor(Math.random() * 10e7)}.txt`;
 }
