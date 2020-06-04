@@ -42,7 +42,6 @@ export default function (app: Application) {
       foreignKey: { name: 'userId', allowNull: false },
     });
 
-
     this.belongsToMany(models.users, {
       through: 'subscribers',
       as: 'subscriptions',

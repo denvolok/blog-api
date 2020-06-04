@@ -1,5 +1,5 @@
 import { ServiceAddons } from '@feathersjs/feathers';
-import { Application, BlobService } from '../../declarations';
+import { Application } from '../../declarations';
 import hooks from './uploads.hooks';
 
 const Blob = require('feathers-blob');
@@ -10,7 +10,7 @@ const blobStorage = fs('.');
 
 declare module '../../declarations' {
   interface ServiceTypes {
-    'uploads': BlobService.Service & ServiceAddons<any>;
+    'uploads': ServiceAddons<any>;
   }
 }
 
